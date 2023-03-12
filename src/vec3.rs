@@ -6,11 +6,11 @@ use num_traits::{Num, NumAssign, Signed};
 pub struct Vec3<T: Num + Copy>(pub T, pub T, pub T);
 
 impl<T: Num + Copy> Vec3<T> {
-    pub fn dot(&self, rhs: &Self) -> T {
+    pub fn dot(self, rhs: Self) -> T {
         (self.0 * rhs.0) + (self.1 * rhs.1) + (self.2 * rhs.2)
     }
 
-    pub fn cross(&self, rhs: &Self) -> Self {
+    pub fn cross(self, rhs: &Self) -> Self {
         Self(
             self.1 * rhs.2 - self.2 * rhs.1,
             self.2 * rhs.0 - self.0 * rhs.2,
@@ -18,14 +18,14 @@ impl<T: Num + Copy> Vec3<T> {
         )
     }
 
-    pub fn len(&self) -> f64
+    pub fn len(self) -> f64
     where
         T: Into<f64>,
     {
         self.dot(self).into().sqrt()
     }
 
-    pub fn normalize(&self) -> Vec3<f64>
+    pub fn normalize(self) -> Vec3<f64>
     where
         T: Into<f64>,
     {
