@@ -2,8 +2,8 @@ use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssi
 
 use num_traits::{Num, NumAssign, Signed};
 
-#[derive(Debug)]
-pub struct Vec3<T: Num>(pub T, pub T, pub T);
+#[derive(Debug, Clone, Copy)]
+pub struct Vec3<T: Num + Copy>(pub T, pub T, pub T);
 
 impl<T: Num + Copy> Vec3<T> {
     pub fn dot(&self, rhs: &Self) -> T {
@@ -38,7 +38,7 @@ impl<T: Num + Copy> Vec3<T> {
     }
 }
 
-impl<T: Signed> Neg for Vec3<T> {
+impl<T: Signed + Copy> Neg for Vec3<T> {
     type Output = Self;
 
     fn neg(self) -> Self::Output {
@@ -46,7 +46,7 @@ impl<T: Signed> Neg for Vec3<T> {
     }
 }
 
-impl<T: Num> Add for Vec3<T> {
+impl<T: Num + Copy> Add for Vec3<T> {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
@@ -54,7 +54,7 @@ impl<T: Num> Add for Vec3<T> {
     }
 }
 
-impl<T: NumAssign> AddAssign for Vec3<T> {
+impl<T: NumAssign + Copy> AddAssign for Vec3<T> {
     fn add_assign(&mut self, rhs: Self) {
         self.0 += rhs.0;
         self.1 += rhs.1;
@@ -62,7 +62,7 @@ impl<T: NumAssign> AddAssign for Vec3<T> {
     }
 }
 
-impl<T: Signed> Sub for Vec3<T> {
+impl<T: Signed + Copy> Sub for Vec3<T> {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output {
@@ -70,7 +70,7 @@ impl<T: Signed> Sub for Vec3<T> {
     }
 }
 
-impl<T: NumAssign> SubAssign for Vec3<T> {
+impl<T: NumAssign + Copy> SubAssign for Vec3<T> {
     fn sub_assign(&mut self, rhs: Self) {
         self.0 -= rhs.0;
         self.1 -= rhs.1;
