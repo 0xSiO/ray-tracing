@@ -3,6 +3,8 @@ use std::{
     io::{BufWriter, Write},
 };
 
+use crate::vec3::Vec3;
+
 mod vec3;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -17,16 +19,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("Lines remaining: {}", y);
 
         for x in 0..width {
-            let r = (x as f64) / (width - 1) as f64;
-            let g = (y as f64) / (height - 1) as f64;
-            let b = 0.25;
+            let color = Vec3(
+                (x as f64) / (width - 1) as f64,
+                (y as f64) / (height - 1) as f64,
+                0.25,
+            ) * 255.999;
 
             write!(
                 &mut writer,
                 "{} {} {}\n",
-                (r * 255.999) as i32,
-                (g * 255.999) as i32,
-                (b * 255.999) as i32,
+                color.0 as i32, color.1 as i32, color.2 as i32,
             )?;
         }
     }

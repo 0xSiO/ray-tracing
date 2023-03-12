@@ -5,12 +5,6 @@ use num_traits::{Num, NumAssign, Signed};
 #[derive(Debug)]
 pub struct Vec3<T: Num>(pub T, pub T, pub T);
 
-impl<T: Num> Vec3<T> {
-    pub fn new(a: T, b: T, c: T) -> Self {
-        Self(a, b, c)
-    }
-}
-
 impl<T: Num + Copy> Vec3<T> {
     pub fn dot(&self, rhs: &Self) -> T {
         (self.0 * rhs.0) + (self.1 * rhs.1) + (self.2 * rhs.2)
