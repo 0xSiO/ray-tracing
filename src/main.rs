@@ -38,7 +38,7 @@ fn color_at(ray: &Ray<f64>) -> Vec3<f64> {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let aspect_ratio = 16.0 / 9.0;
-    let width = 1200 as usize;
+    let width = 1200_usize;
     let height = (width as f64 / aspect_ratio) as usize;
 
     let viewport_height = 2.0;
