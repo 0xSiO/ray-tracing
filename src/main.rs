@@ -3,6 +3,8 @@ use std::{
     io::{BufWriter, Write},
 };
 
+mod vec3;
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let width = 512;
     let height = 512;
