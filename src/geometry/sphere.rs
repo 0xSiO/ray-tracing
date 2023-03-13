@@ -20,11 +20,12 @@ impl Sphere {
 }
 
 impl Hit for Sphere {
-    // Find point at which ray hits sphere, using this equation:
-    // (t**2)(d⋅d) + 2td⋅(P−C) + (P−C)⋅(P−C) - r**2 = 0
+    // Find point at which ray hits sphere by solving this equation for t:
+    // (t^2)(d⋅d) + 2td⋅(P−C) + (P−C)⋅(P−C) - r^2 = 0
     //
     // P: position of the ray
     // d: direction of the ray
+    // t: distance along ray
     // C: center of the sphere
     // r: radius of the sphere
     fn find_ray_hit(&self, ray: Ray, min_dist: f64, max_dist: f64) -> Option<RayHit> {
