@@ -14,23 +14,24 @@ type Point = Vec3<f64>;
 type Color = Vec3<f64>;
 
 // Finds point at which ray hits sphere, using this equation:
-// (t**2)(b⋅b) + 2tb⋅(A−C) + (A−C)⋅(A−C) - r**2 = 0
+// (t**2)(d⋅d) + 2td⋅(A−C) + (A−C)⋅(A−C) - r**2 = 0
 //
 // A: position of the ray
-// b: direction of the ray
+// d: direction of the ray
 // C: center of the sphere
 // r: radius of the sphere
 fn intersect_sphere(center: Point, radius: f64, ray: Ray) -> Option<Point> {
     let dir = ray.dir();
     let a = dir.dot(dir);
-    let b = 2. * dir.dot(ray.pos() - center);
+    // Quadratic formula optimization where b = 2h, h = d⋅(A−C)
+    let h = dir.dot(ray.pos() - center);
     let c = (ray.pos() - center).dot(ray.pos() - center) - radius * radius;
-    let discriminant = b * b - 4. * a * c;
+    let discriminant = h * h - a * c;
 
     if discriminant < 0. {
         None
     } else {
-        Some(ray.at((-b - discriminant.sqrt()) / (2. * a)))
+        Some(ray.at((-h - discriminant.sqrt()) / a))
     }
 }
 
@@ -66,7 +67,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     writeln!(&mut writer, "P3\n{} {}\n255", width, height)?;
 
     for y in (0..height).rev() {
-        println!("Lines remaining: {}", y);
+        // println!("Lines remaining: {}", y);
 
         for x in 0..width {
             let u = (x as f64) / (width - 1) as f64;
