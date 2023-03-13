@@ -1,10 +1,11 @@
 use std::{
+    f64::INFINITY,
     fs::File,
     io::{BufWriter, Write},
 };
 
 use crate::{
-    geometry::{Hit, Ray, Sphere},
+    geometry::{Hit, Objects, Ray, Sphere},
     vec3::Vec3,
 };
 
@@ -14,11 +15,10 @@ mod vec3;
 /// RGB values, between 0.0 and 1.0
 type Color = Vec3<f64>;
 
-fn color_at(ray: Ray) -> Color {
-    let sphere = Sphere::new(Vec3(0., 0., -1.), 0.5);
-    if let Some(hit) = sphere.find_ray_hit(ray, 0., 1.) {
+fn ray_color(ray: Ray, world: &Objects) -> Color {
+    if let Some(hit) = world.find_ray_hit(ray, 0., INFINITY) {
         let n = hit.normal();
-        return Vec3(n.0 + 1., n.1 + 1., n.2 + 1.) / 2.;
+        return (n + Vec3(1., 1., 1.)) / 2.;
     }
 
     // t = 0 at y = -1, t = 1 at y = 1
@@ -28,9 +28,19 @@ fn color_at(ray: Ray) -> Color {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Image
+
     let aspect_ratio = 16.0 / 9.0;
     let width = 1000_usize;
     let height = (width as f64 / aspect_ratio) as usize;
+
+    // World
+
+    let mut world = Objects::new();
+    world.add(Sphere::new(Vec3(0., 0., -1.), 0.5));
+    world.add(Sphere::new(Vec3(0., -100.5, -1.), 100.));
+
+    // Camera
 
     let viewport_height = 2.0;
     let viewport_width = aspect_ratio * viewport_height;
@@ -40,6 +50,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let horizontal = Vec3(viewport_width, 0., 0.);
     let vertical = Vec3(0., viewport_height, 0.);
     let lower_left_corner = origin - horizontal / 2. - vertical / 2. - Vec3(0., 0., focal_length);
+
+    // Render
 
     let mut writer = BufWriter::new(File::create("image.ppm")?);
 
@@ -57,7 +69,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 lower_left_corner + horizontal * u + vertical * v - origin,
             );
 
-            let color = color_at(ray);
+            let color = ray_color(ray, &world);
 
             writeln!(
                 &mut writer,

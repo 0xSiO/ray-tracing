@@ -1,5 +1,6 @@
 use super::{Hit, Point, Ray, RayHit};
 
+#[derive(Debug, Clone, Copy)]
 pub struct Sphere {
     center: Point,
     radius: f64,
