@@ -10,7 +10,7 @@ impl<T: Num + Copy> Vec3<T> {
         (self.0 * rhs.0) + (self.1 * rhs.1) + (self.2 * rhs.2)
     }
 
-    pub fn cross(self, rhs: &Self) -> Self {
+    pub fn cross(self, rhs: Self) -> Self {
         Self(
             self.1 * rhs.2 - self.2 * rhs.1,
             self.2 * rhs.0 - self.0 * rhs.2,
