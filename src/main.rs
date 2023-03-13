@@ -3,42 +3,21 @@ use std::{
     io::{BufWriter, Write},
 };
 
-use crate::{geometry::Ray, vec3::Vec3};
+use crate::{
+    geometry::{Hit, Ray, Sphere},
+    vec3::Vec3,
+};
 
 mod geometry;
 mod vec3;
 
-/// Point in 3D space: x, y, z
-type Point = Vec3<f64>;
 /// RGB values, between 0.0 and 1.0
 type Color = Vec3<f64>;
 
-// Finds point at which ray hits sphere, using this equation:
-// (t**2)(d⋅d) + 2td⋅(A−C) + (A−C)⋅(A−C) - r**2 = 0
-//
-// A: position of the ray
-// d: direction of the ray
-// C: center of the sphere
-// r: radius of the sphere
-fn intersect_sphere(center: Point, radius: f64, ray: Ray) -> Option<Point> {
-    let dir = ray.dir();
-    let a = dir.dot(dir);
-    // Quadratic formula optimization where b = 2h, h = d⋅(A−C)
-    let h = dir.dot(ray.pos() - center);
-    let c = (ray.pos() - center).dot(ray.pos() - center) - radius * radius;
-    let discriminant = h * h - a * c;
-
-    if discriminant < 0. {
-        None
-    } else {
-        Some(ray.at((-h - discriminant.sqrt()) / a))
-    }
-}
-
 fn color_at(ray: Ray) -> Color {
-    let sphere_center = Vec3(0., 0., -1.);
-    if let Some(point) = intersect_sphere(sphere_center, 0.5, ray) {
-        let n = (point - sphere_center).normalize();
+    let sphere = Sphere::new(Vec3(0., 0., -1.), 0.5);
+    if let Some(hit) = sphere.find_ray_hit(ray, 0., 1.) {
+        let n = hit.normal();
         return Vec3(n.0 + 1., n.1 + 1., n.2 + 1.) / 2.;
     }
 

@@ -1,28 +1,10 @@
-use crate::{vec3::Vec3, Point};
+use crate::vec3::Vec3;
 
-#[derive(Debug, Clone, Copy)]
-pub struct Ray {
-    pos: Point,
-    dir: Vec3<f64>,
-}
+mod ray;
+mod sphere;
 
-impl Ray {
-    pub fn new(pos: Point, dir: Vec3<f64>) -> Self {
-        Self {
-            pos,
-            dir: dir.normalize(),
-        }
-    }
+pub use ray::{Hit, Ray, RayHit};
+pub use sphere::Sphere;
 
-    pub fn pos(&self) -> Point {
-        self.pos
-    }
-
-    pub fn dir(&self) -> Vec3<f64> {
-        self.dir
-    }
-
-    pub fn at(&self, t: f64) -> Point {
-        self.pos + self.dir * t
-    }
-}
+/// Point in 3D space: x, y, z
+pub type Point = Vec3<f64>;
