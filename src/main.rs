@@ -3,9 +3,9 @@ use std::{
     io::{BufWriter, Write},
 };
 
-use crate::{ray::Ray, vec3::Vec3};
+use crate::{geometry::Ray, vec3::Vec3};
 
-mod ray;
+mod geometry;
 mod vec3;
 
 /// Point in 3D space: x, y, z
